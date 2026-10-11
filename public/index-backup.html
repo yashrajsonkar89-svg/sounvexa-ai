@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sounvexa AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:white;font-family:Arial,sans-serif}
+header{padding:20px;background:#111a30;border-bottom:1px solid #26334f}
+h2{margin:0;color:#7dd3fc}
+header p{margin:6px 0 0;color:#aab8d0}
+#chat{height:calc(100dvh - 155px);overflow-y:auto;padding:18px}
+.msg{padding:12px 15px;margin:10px 0;border-radius:15px;max-width:88%;line-height:1.5;white-space:pre-wrap}
+.bot{background:#192641}
+.user{background:#075985;margin-left:auto}
+form{display:flex;gap:8px;padding:12px;background:#111a30}
+input{flex:1;min-width:0;padding:14px;border:1px solid #344461;border-radius:12px;background:#0b1020;color:white;font-size:16px}
+button{border:0;border-radius:12px;padding:0 18px;background:#38bdf8;color:#07111f;font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h2>✦ Sounvexa AI</h2>
+<p>आपका अपना AI Assistant</p>
+</header>
+<div id="chat">
+<div class="msg bot">नमस्ते भाई! 👋 मैं Sounvexa AI हूँ। अभी मेरा चैट इंटरफेस तैयार है। असली AI जवाब देने की सुविधा हम अगले स्टेप में जोड़ेंगे।</div>
+</div>
+<form id="form">
+<input id="message" placeholder="यहाँ अपना संदेश लिखें..." autocomplete="off" required>
+<button type="submit">भेजें</button>
+</form>
+<script>
+const form=document.getElementById('form');
+const input=document.getElementById('message');
+const chat=document.getElementById('chat');
+form.addEventListener('submit',function(e){
+e.preventDefault();
+const value=input.value.trim();
+if(!value)return;
+const msg=document.createElement('div');
+msg.className='msg user';
+msg.textContent=value;
+chat.appendChild(msg);
+input.value='';
+chat.scrollTop=chat.scrollHeight;
+const reply=document.createElement('div');
+reply.className='msg bot';
+reply.textContent='तुम्हारा संदेश मिल गया भाई! असली AI जवाब देने की सुविधा अभी जोड़नी बाकी है।';
+chat.appendChild(reply);
+chat.scrollTop=chat.scrollHeight;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Sounvexa AI</string>
+    <string name="title_activity_main">Sounvexa AI</string>
+    <string name="package_name">com.sounvexa.ai</string>
+    <string name="custom_url_scheme">com.sounvexa.ai</string>
+</resources>
