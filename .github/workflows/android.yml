@@ -23,6 +23,8 @@ jobs:
           node-version: '20'
           cache: npm
       - name: Set up Android SDK
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
         uses: android-actions/setup-android@v3
       - name: Install packages
         run: npm ci
