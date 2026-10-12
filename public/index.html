@@ -222,8 +222,8 @@ if(mic){
       input.value=(input.value ? input.value+' ' : '')+spokenText;
       input.focus();
     };
-    recognition.onerror=()=>{
-      alert('Bhai, awaaz nahi mili. Microphone permission check karke dobara try karo.');
+    recognition.onerror=(event)=>{
+      alert('Microphone error: '+(event.error || 'unknown')+'. Keyboard ka mic bhi try kar sakte ho.');
     };
     try{recognition.start();}
     catch(error){alert('Bhai, thodi der baad dobara microphone dabao.');}
