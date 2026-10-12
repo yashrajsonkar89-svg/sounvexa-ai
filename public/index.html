@@ -187,6 +187,7 @@ form{
 
 <form id="form">
   <input id="message" placeholder="Message Sounvexa AI..." autocomplete="off" required>
+  <button id="mic" type="button" aria-label="Speak your message">🎤</button>
   <button id="send" type="submit" aria-label="Send message">↑</button>
 </form>
 <div class="disclaimer">AI गलतियाँ कर सकता है। ज़रूरी जानकारी जाँच लें।</div>
@@ -200,6 +201,33 @@ const chat=document.getElementById('chat');
 const HISTORY_KEY='sounvexa_chat_history_v1';
 function saveChatHistory(){
   try{localStorage.setItem(HISTORY_KEY,chat.innerHTML);}catch(error){console.warn('Chat history save failed',error);}
+}
+
+const mic=document.getElementById('mic');
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+if(mic){
+  mic.addEventListener('click',()=>{
+    if(!SpeechRecognition){
+      alert('Bhai, is app mein voice typing support nahi hai. Keyboard ka microphone use karo.');
+      return;
+    }
+    const recognition=new SpeechRecognition();
+    recognition.lang='hi-IN';
+    recognition.interimResults=false;
+    recognition.continuous=false;
+
+    recognition.onresult=(event)=>{
+      const spokenText=event.results[0][0].transcript;
+      input.value=(input.value ? input.value+' ' : '')+spokenText;
+      input.focus();
+    };
+    recognition.onerror=()=>{
+      alert('Bhai, awaaz nahi mili. Microphone permission check karke dobara try karo.');
+    };
+    try{recognition.start();}
+    catch(error){alert('Bhai, thodi der baad dobara microphone dabao.');}
+  });
 }
 
 const send=document.getElementById('send');
