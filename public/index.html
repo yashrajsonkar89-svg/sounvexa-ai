@@ -147,7 +147,8 @@ form{
     <h1>Sounvexa AI</h1>
     <div class="status">AI Assistant Online</div>
   </div>
-  <button class="icon-btn" id="clear" type="button" aria-label="New chat">＋</button>
+  <button class="icon-btn" id="history" type="button" aria-label="Chat history" title="Chat History">◷</button>
+  <button class="icon-btn" id="clear" type="button" aria-label="New chat" title="New chat">＋</button>
 </header>
 
 <main>
@@ -195,9 +196,41 @@ form{
 const form=document.getElementById('form');
 const input=document.getElementById('message');
 const chat=document.getElementById('chat');
+
+const HISTORY_KEY='sounvexa_chat_history_v1';
+function saveChatHistory(){
+  try{localStorage.setItem(HISTORY_KEY,chat.innerHTML);}catch(error){console.warn('Chat history save failed',error);}
+}
+
 const send=document.getElementById('send');
 const welcome=document.getElementById('welcome');
 const suggestions=document.getElementById('suggestions');
+
+function loadChatHistory(){
+  try{
+    const history=localStorage.getItem(HISTORY_KEY);
+    if(history){
+      chat.innerHTML=history;
+      welcome.style.display='none';
+      suggestions.style.display='none';
+    }
+  }catch(error){console.warn('Chat history load failed',error);}
+}
+loadChatHistory();
+
+document.getElementById('history').addEventListener('click',()=>{
+  const history=localStorage.getItem(HISTORY_KEY);
+  if(history){
+    chat.innerHTML=history;
+    welcome.style.display='none';
+    suggestions.style.display='none';
+    chat.scrollIntoView({block:'end',behavior:'smooth'});
+  }else{
+    alert('अभी कोई पुरानी चैट सेव नहीं है, भाई!');
+  }
+});
+
+
 
 document.querySelectorAll('.suggestion').forEach(button=>{
   button.addEventListener('click',()=>{
@@ -207,6 +240,7 @@ document.querySelectorAll('.suggestion').forEach(button=>{
 });
 
 document.getElementById('clear').addEventListener('click',()=>{
+  localStorage.removeItem(HISTORY_KEY);
   chat.innerHTML='';
   const greeting=document.createElement('div');
   greeting.className='msg bot';
@@ -234,6 +268,7 @@ form.addEventListener('submit',async function(e){
   msg.className='msg user';
   msg.textContent=value;
   chat.appendChild(msg);
+  saveChatHistory();
   input.value='';
   input.disabled=true;
   send.disabled=true;
@@ -266,6 +301,7 @@ form.addEventListener('submit',async function(e){
   }finally{
     input.disabled=false;
     send.disabled=false;
+    saveChatHistory();
     input.focus();
     chat.scrollIntoView({block:'end',behavior:'smooth'});
   }
