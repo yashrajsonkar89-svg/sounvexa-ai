@@ -3,69 +3,272 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#faf9ff">
 <title>Sounvexa AI</title>
 <style>
+:root {
+  --bg:#faf9ff;
+  --white:#ffffff;
+  --purple:#7552d6;
+  --purple-light:#eee8ff;
+  --text:#27243a;
+  --muted:#858098;
+  --line:#e9e3f5;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:white;font-family:Arial,sans-serif}
-header{padding:20px;background:#111a30;border-bottom:1px solid #26334f}
-h2{margin:0;color:#7dd3fc}
-header p{margin:6px 0 0;color:#aab8d0}
-#chat{height:calc(100dvh - 155px);overflow-y:auto;padding:18px}
-.msg{padding:12px 15px;margin:10px 0;border-radius:15px;max-width:88%;line-height:1.5;white-space:pre-wrap}
-.bot{background:#192641}
-.user{background:#075985;margin-left:auto}
-form{display:flex;gap:8px;padding:12px;background:#111a30}
-input{flex:1;min-width:0;padding:14px;border:1px solid #344461;border-radius:12px;background:#0b1020;color:white;font-size:16px}
-button{border:0;border-radius:12px;padding:0 18px;background:#38bdf8;color:#07111f;font-weight:bold}
+body{
+  margin:0;
+  min-height:100dvh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+.app{
+  max-width:850px;
+  min-height:100dvh;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px 18px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid var(--line);
+}
+.logo{
+  width:45px;height:45px;
+  display:grid;place-items:center;
+  border-radius:15px;
+  background:linear-gradient(145deg,#8e70ed,#6746c5);
+  color:white;font-size:25px;
+  box-shadow:0 5px 14px #7552d626;
+}
+.brand{flex:1;min-width:0}
+.brand h1{font-size:19px;margin:0;font-weight:750;letter-spacing:-.5px}
+.status{font-size:12px;color:#23966d;margin-top:3px}
+.status:before{
+  content:"";display:inline-block;width:7px;height:7px;
+  background:#32bd86;border-radius:50%;margin-right:6px;
+}
+.icon-btn{
+  border:1px solid var(--line);
+  background:white;color:var(--purple);
+  width:40px;height:40px;border-radius:13px;
+  font-size:20px;cursor:pointer;
+}
+main{flex:1;padding:25px 16px 20px}
+.welcome{text-align:center;padding:14px 5px 22px}
+.hero-icon{
+  margin:0 auto 15px;
+  width:76px;height:76px;border-radius:27px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#f0eaff,#e3d8ff);
+  color:var(--purple);font-size:38px;
+  box-shadow:0 8px 24px #7552d612;
+}
+.welcome h2{font-size:27px;letter-spacing:-1px;margin:0 0 8px}
+.welcome p{color:var(--muted);font-size:14px;margin:0;line-height:1.6}
+.suggestions{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;max-width:580px;margin:0 auto 25px;
+}
+.suggestion{
+  text-align:left;display:flex;align-items:flex-start;gap:10px;
+  padding:15px 12px;min-height:83px;
+  background:white;border:1px solid var(--line);
+  border-radius:17px;color:var(--text);
+  cursor:pointer;box-shadow:0 3px 12px #33205b05;
+}
+.suggestion:active{background:var(--purple-light)}
+.s-icon{font-size:21px;color:var(--purple)}
+.suggestion strong{display:block;font-size:13px;margin:2px 0 5px}
+.suggestion small{display:block;font-size:11px;color:var(--muted);line-height:1.4}
+#chat{display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+.msg{
+  max-width:88%;padding:13px 15px;border-radius:18px;
+  font-size:15px;line-height:1.7;white-space:pre-wrap;
+  overflow-wrap:anywhere;box-shadow:0 3px 12px #33205b06;
+}
+.bot{
+  align-self:flex-start;background:white;border:1px solid var(--line);
+  border-bottom-left-radius:5px;
+}
+.user{
+  align-self:flex-end;background:var(--purple-light);
+  border:1px solid #e0d5ff;color:#39266d;
+  border-bottom-right-radius:5px;
+}
+.bot-label{font-size:12px;font-weight:750;color:var(--purple);margin-bottom:5px}
+form{
+  position:sticky;bottom:0;z-index:4;
+  display:flex;align-items:center;gap:9px;
+  padding:12px 13px max(12px,env(safe-area-inset-bottom));
+  background:rgba(250,249,255,.96);
+  border-top:1px solid var(--line);
+}
+#message{
+  flex:1;min-width:0;height:49px;
+  padding:0 15px;border:1px solid #e1d9f1;
+  border-radius:16px;background:white;color:var(--text);
+  font-size:15px;outline:none;
+}
+#message::placeholder{color:#9690a8}
+#message:focus{border-color:#a58de9;box-shadow:0 0 0 3px #7552d614}
+#send{
+  flex-shrink:0;width:49px;height:49px;
+  border:0;border-radius:16px;background:var(--purple);
+  color:white;font-size:23px;cursor:pointer;
+  box-shadow:0 5px 13px #7552d630;
+}
+#send:disabled{opacity:.55}
+.disclaimer{text-align:center;color:#9690a8;font-size:10px;padding:0 8px 10px}
+@media(min-width:600px){
+  header{padding:17px 27px}
+  main{padding:30px 28px}
+  .welcome h2{font-size:31px}
+  .suggestion{padding:17px}
+  form{padding-left:25px;padding-right:25px}
+  .msg{max-width:76%}
+}
 </style>
 </head>
 <body>
+<div class="app">
 <header>
-<h2>✦ Sounvexa AI</h2>
-<p>आपका अपना AI Assistant</p>
+  <div class="logo">✦</div>
+  <div class="brand">
+    <h1>Sounvexa AI</h1>
+    <div class="status">AI Assistant Online</div>
+  </div>
+  <button class="icon-btn" id="clear" type="button" aria-label="New chat">＋</button>
 </header>
-<div id="chat">
-<div class="msg bot">नमस्ते भाई! 👋 मैं Sounvexa AI हूँ। मुझसे कुछ भी पूछो!</div>
-</div>
+
+<main>
+  <section class="welcome" id="welcome">
+    <div class="hero-icon">✦</div>
+    <h2>Hello, I'm Sounvexa</h2>
+    <p>आपका अपना AI Assistant। आज मैं आपकी क्या मदद करूँ?</p>
+  </section>
+
+  <section class="suggestions" id="suggestions">
+    <button class="suggestion" type="button" data-prompt="मेरे लिए कुछ अच्छा लिखो।">
+      <span class="s-icon">✎</span>
+      <span><strong>Write something</strong><small>Ideas, stories और writing</small></span>
+    </button>
+    <button class="suggestion" type="button" data-prompt="मुझे कोई नई चीज आसान भाषा में सिखाओ।">
+      <span class="s-icon">▤</span>
+      <span><strong>Learn something</strong><small>कुछ नया सीखें</small></span>
+    </button>
+    <button class="suggestion" type="button" data-prompt="मुझे एक नया project बनाने में मदद करो।">
+      <span class="s-icon">⌘</span>
+      <span><strong>Build an idea</strong><small>Projects और coding</small></span>
+    </button>
+    <button class="suggestion" type="button" data-prompt="मुझे एक रोचक विषय के बारे में बताओ।">
+      <span class="s-icon">◎</span>
+      <span><strong>Explore a topic</strong><small>कुछ नया जानें</small></span>
+    </button>
+  </section>
+
+  <section id="chat" aria-live="polite">
+    <div class="msg bot">
+      <div class="bot-label">✦ Sounvexa AI</div>
+      नमस्ते भाई! 👋 मैं Sounvexa AI हूँ। मुझसे कुछ भी पूछो!
+    </div>
+  </section>
+</main>
+
 <form id="form">
-<input id="message" placeholder="यहाँ अपना संदेश लिखें..." autocomplete="off" required>
-<button type="submit">भेजें</button>
+  <input id="message" placeholder="Message Sounvexa AI..." autocomplete="off" required>
+  <button id="send" type="submit" aria-label="Send message">↑</button>
 </form>
+<div class="disclaimer">AI गलतियाँ कर सकता है। ज़रूरी जानकारी जाँच लें।</div>
+</div>
+
 <script>
 const form=document.getElementById('form');
 const input=document.getElementById('message');
 const chat=document.getElementById('chat');
-form.addEventListener('submit', async function(e){
-e.preventDefault();
-const value=input.value.trim();
-if(!value)return;
-const msg=document.createElement('div');
-msg.className='msg user';
-msg.textContent=value;
-chat.appendChild(msg);
-input.value='';
-input.disabled=true;
-const reply=document.createElement('div');
-reply.className='msg bot';
-reply.textContent='Sounvexa AI जवाब सोच रहा है...';
-chat.appendChild(reply);
-chat.scrollTop=chat.scrollHeight;
-try {
-  const response = await fetch('https://sounvexa-ai.onrender.com/api/chat', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({message:value})
+const send=document.getElementById('send');
+const welcome=document.getElementById('welcome');
+const suggestions=document.getElementById('suggestions');
+
+document.querySelectorAll('.suggestion').forEach(button=>{
+  button.addEventListener('click',()=>{
+    input.value=button.dataset.prompt;
+    input.focus();
   });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'जवाब नहीं मिल पाया।');
-  reply.textContent = data.reply || 'अभी जवाब नहीं मिला।';
-} catch (error) {
-  reply.textContent = 'माफ़ करना भाई, जवाब नहीं मिल पाया। इंटरनेट या सर्वर जाँचो।';
-} finally {
-  input.disabled=false;
+});
+
+document.getElementById('clear').addEventListener('click',()=>{
+  chat.innerHTML='';
+  const greeting=document.createElement('div');
+  greeting.className='msg bot';
+  const label=document.createElement('div');
+  label.className='bot-label';
+  label.textContent='✦ Sounvexa AI';
+  greeting.appendChild(label);
+  greeting.appendChild(document.createTextNode('नमस्ते भाई! 👋 मैं Sounvexa AI हूँ। मुझसे कुछ भी पूछो!'));
+  chat.appendChild(greeting);
+  welcome.style.display='';
+  suggestions.style.display='';
+  input.value='';
   input.focus();
-  chat.scrollTop=chat.scrollHeight;
-}
+});
+
+form.addEventListener('submit',async function(e){
+  e.preventDefault();
+  const value=input.value.trim();
+  if(!value)return;
+
+  welcome.style.display='none';
+  suggestions.style.display='none';
+
+  const msg=document.createElement('div');
+  msg.className='msg user';
+  msg.textContent=value;
+  chat.appendChild(msg);
+  input.value='';
+  input.disabled=true;
+  send.disabled=true;
+
+  const reply=document.createElement('div');
+  reply.className='msg bot';
+  const label=document.createElement('div');
+  label.className='bot-label';
+  label.textContent='✦ Sounvexa AI';
+  reply.appendChild(label);
+  reply.appendChild(document.createTextNode('जवाब तैयार हो रहा है...'));
+  chat.appendChild(reply);
+  chat.scrollIntoView({block:'end',behavior:'smooth'});
+
+  try{
+    const response=await fetch('https://sounvexa-ai.onrender.com/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:value})
+    });
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||'जवाब नहीं मिल पाया।');
+    reply.replaceChildren();
+    reply.appendChild(label);
+    reply.appendChild(document.createTextNode(data.reply||'अभी जवाब नहीं मिला।'));
+  }catch(error){
+    reply.replaceChildren();
+    reply.appendChild(label);
+    reply.appendChild(document.createTextNode('माफ़ करना भाई, जवाब नहीं मिल पाया। इंटरनेट या सर्वर जाँचो।'));
+  }finally{
+    input.disabled=false;
+    send.disabled=false;
+    input.focus();
+    chat.scrollIntoView({block:'end',behavior:'smooth'});
+  }
 });
 </script>
 </body>
