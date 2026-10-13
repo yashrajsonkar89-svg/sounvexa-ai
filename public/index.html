@@ -177,6 +177,8 @@ form{
     </button>
   </section>
 
+  <section id="voiceAssistantCard" style="margin:12px 0;padding:16px;border:1px solid #8b5cf6;border-radius:18px;background:linear-gradient(135deg,#211638,#111827);display:flex;align-items:center;justify-content:space-between;gap:12px;"><div><strong style="display:block;font-size:16px;">🎙️ Baat Cheet</strong><small style="display:block;margin-top:5px;opacity:.8;">Sounvexa AI se awaaz mein baat karein</small></div><button id="voiceAssistant" type="button" aria-label="Baat Cheet shuru karein" style="border:0;border-radius:50%;width:52px;height:52px;background:#8b5cf6;color:white;font-size:22px;">🎙️</button></section>
+
   <section id="chat" aria-live="polite">
     <div class="msg bot">
       <div class="bot-label">✦ Sounvexa AI</div>
@@ -332,6 +334,65 @@ document.getElementById('clear').addEventListener('click',()=>{
   input.focus();
 });
 
+
+const voiceButton=document.getElementById('voiceAssistant');
+let speakVoiceReply=false;
+
+if(voiceButton){
+  voiceButton.addEventListener('click',async()=>{
+    voiceButton.disabled=true;
+    try{
+      let spokenText='';
+      const native=!!(window.Capacitor &&
+        typeof window.Capacitor.isNativePlatform==='function' &&
+        window.Capacitor.isNativePlatform());
+
+      if(native && window.SounvexaSpeechRecognition){
+        const sr=window.SounvexaSpeechRecognition;
+        const status=await sr.available();
+        if(!status.available) throw new Error('Speech recognition available nahi hai.');
+        let permission=await sr.checkPermissions();
+        if(permission.speechRecognition!=='granted'){
+          permission=await sr.requestPermissions();
+        }
+        if(permission.speechRecognition!=='granted'){
+          throw new Error('Microphone permission allow karo.');
+        }
+        const result=await sr.start({
+          language:'hi-IN',
+          maxResults:1,
+          popup:true,
+          partialResults:false,
+          prompt:'Sounvexa AI se baat karein...'
+        });
+        spokenText=result.matches?.[0]||'';
+      }else{
+        const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+        if(!Recognition) throw new Error('Is browser mein voice recognition available nahi hai.');
+        spokenText=await new Promise((resolve,reject)=>{
+          const recognition=new Recognition();
+          recognition.lang='hi-IN';
+          recognition.interimResults=false;
+          recognition.continuous=false;
+          recognition.onresult=event=>resolve(event.results[0][0].transcript);
+          recognition.onerror=event=>reject(new Error(event.error||'Microphone error'));
+          recognition.start();
+        });
+      }
+
+      if(!spokenText.trim()) return;
+      input.value=spokenText.trim();
+      speakVoiceReply=true;
+      form.requestSubmit();
+    }catch(error){
+      speakVoiceReply=false;
+      alert('Baat Cheet: '+(error.message||String(error)));
+    }finally{
+      voiceButton.disabled=false;
+    }
+  });
+}
+
 form.addEventListener('submit',async function(e){
   e.preventDefault();
   const value=input.value.trim();
@@ -369,8 +430,17 @@ form.addEventListener('submit',async function(e){
     if(!response.ok)throw new Error(data.error||'जवाब नहीं मिल पाया।');
     reply.replaceChildren();
     reply.appendChild(label);
-    reply.appendChild(document.createTextNode(data.reply||'अभी जवाब नहीं मिला।'));
+    const answerText=data.reply||'अभी जवाब नहीं मिला।';
+    reply.appendChild(document.createTextNode(answerText));
+    if(speakVoiceReply && 'speechSynthesis' in window){
+      const utterance=new SpeechSynthesisUtterance(answerText);
+      utterance.lang='hi-IN';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+    speakVoiceReply=false;
   }catch(error){
+    speakVoiceReply=false;
     reply.replaceChildren();
     reply.appendChild(label);
     reply.appendChild(document.createTextNode('माफ़ करना भाई, जवाब नहीं मिल पाया। इंटरनेट या सर्वर जाँचो।'));
