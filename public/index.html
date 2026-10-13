@@ -432,11 +432,27 @@ form.addEventListener('submit',async function(e){
     reply.appendChild(label);
     const answerText=data.reply||'अभी जवाब नहीं मिला।';
     reply.appendChild(document.createTextNode(answerText));
-    if(speakVoiceReply && 'speechSynthesis' in window){
-      const utterance=new SpeechSynthesisUtterance(answerText);
-      utterance.lang='hi-IN';
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+    if(speakVoiceReply){
+      try{
+        if(window.SounvexaTextToSpeech &&
+           window.Capacitor &&
+           window.Capacitor.isNativePlatform()){
+          await window.SounvexaTextToSpeech.speak({
+            text:answerText,
+            lang:'hi-IN',
+            rate:1.0,
+            pitch:1.0,
+            volume:1.0
+          });
+        }else if('speechSynthesis' in window){
+          const utterance=new SpeechSynthesisUtterance(answerText);
+          utterance.lang='hi-IN';
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      }catch(voiceError){
+        console.error('Voice reply error:',voiceError);
+      }
     }
     speakVoiceReply=false;
   }catch(error){

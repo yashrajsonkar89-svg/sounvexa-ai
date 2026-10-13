@@ -593,11 +593,141 @@
     }
   });
 
+  // node_modules/@capacitor-community/text-to-speech/dist/esm/definitions.js
+  var QueueStrategy;
+  var init_definitions2 = __esm({
+    "node_modules/@capacitor-community/text-to-speech/dist/esm/definitions.js"() {
+      (function(QueueStrategy2) {
+        QueueStrategy2[QueueStrategy2["Flush"] = 0] = "Flush";
+        QueueStrategy2[QueueStrategy2["Add"] = 1] = "Add";
+      })(QueueStrategy || (QueueStrategy = {}));
+    }
+  });
+
+  // node_modules/@capacitor-community/text-to-speech/dist/esm/web.js
+  var web_exports2 = {};
+  __export(web_exports2, {
+    TextToSpeechWeb: () => TextToSpeechWeb
+  });
+  var TextToSpeechWeb;
+  var init_web2 = __esm({
+    "node_modules/@capacitor-community/text-to-speech/dist/esm/web.js"() {
+      init_dist();
+      TextToSpeechWeb = class extends WebPlugin {
+        constructor() {
+          super();
+          this.speechSynthesis = null;
+          if ("speechSynthesis" in window) {
+            this.speechSynthesis = window.speechSynthesis;
+            window.addEventListener("beforeunload", () => {
+              this.stop();
+            });
+          }
+        }
+        async speak(options) {
+          if (!this.speechSynthesis) {
+            this.throwUnsupportedError();
+          }
+          await this.stop();
+          const speechSynthesis = this.speechSynthesis;
+          const utterance = this.createSpeechSynthesisUtterance(options);
+          return new Promise((resolve, reject) => {
+            utterance.onend = () => {
+              resolve();
+            };
+            utterance.onerror = (event) => {
+              reject(event);
+            };
+            speechSynthesis.speak(utterance);
+          });
+        }
+        async stop() {
+          if (!this.speechSynthesis) {
+            this.throwUnsupportedError();
+          }
+          this.speechSynthesis.cancel();
+        }
+        async getSupportedLanguages() {
+          const voices = this.getSpeechSynthesisVoices();
+          const languages = voices.map((voice) => voice.lang);
+          const filteredLanguages = languages.filter((v, i, a) => a.indexOf(v) == i);
+          return { languages: filteredLanguages };
+        }
+        async getSupportedVoices() {
+          const voices = this.getSpeechSynthesisVoices();
+          return { voices };
+        }
+        async isLanguageSupported(options) {
+          const result = await this.getSupportedLanguages();
+          const isLanguageSupported = result.languages.includes(options.lang);
+          return { supported: isLanguageSupported };
+        }
+        async openInstall() {
+          this.throwUnimplementedError();
+        }
+        createSpeechSynthesisUtterance(options) {
+          const voices = this.getSpeechSynthesisVoices();
+          const utterance = new SpeechSynthesisUtterance();
+          const { text, lang, rate, pitch, volume, voice } = options;
+          if (voice !== void 0) {
+            utterance.voice = voices[voice];
+          }
+          if (volume !== void 0) {
+            utterance.volume = volume >= 0 && volume <= 1 ? volume : 1;
+          }
+          if (rate !== void 0) {
+            utterance.rate = rate >= 0.1 && rate <= 10 ? rate : 1;
+          }
+          if (pitch !== void 0) {
+            utterance.pitch = pitch >= 0 && pitch <= 2 ? pitch : 2;
+          }
+          if (lang) {
+            utterance.lang = lang;
+          }
+          utterance.text = text;
+          return utterance;
+        }
+        getSpeechSynthesisVoices() {
+          if (!this.speechSynthesis) {
+            this.throwUnsupportedError();
+          }
+          if (!this.supportedVoices || this.supportedVoices.length < 1) {
+            this.supportedVoices = this.speechSynthesis.getVoices();
+          }
+          return this.supportedVoices;
+        }
+        throwUnsupportedError() {
+          throw this.unavailable("SpeechSynthesis API not available in this browser.");
+        }
+        throwUnimplementedError() {
+          throw this.unimplemented("Not implemented on web.");
+        }
+      };
+    }
+  });
+
+  // node_modules/@capacitor-community/text-to-speech/dist/esm/index.js
+  var TextToSpeech;
+  var init_esm2 = __esm({
+    "node_modules/@capacitor-community/text-to-speech/dist/esm/index.js"() {
+      init_dist();
+      init_definitions2();
+      TextToSpeech = registerPlugin("TextToSpeech", {
+        web: () => Promise.resolve().then(() => (init_web2(), web_exports2)).then((m) => new m.TextToSpeechWeb())
+      });
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis;
+      }
+    }
+  });
+
   // src/voice.js
   var require_voice = __commonJS({
     "src/voice.js"() {
       init_esm();
+      init_esm2();
       window.SounvexaSpeechRecognition = SpeechRecognition2;
+      window.SounvexaTextToSpeech = TextToSpeech;
     }
   });
   require_voice();
