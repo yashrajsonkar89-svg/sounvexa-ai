@@ -193,6 +193,7 @@ form{
 <div class="disclaimer">AI गलतियाँ कर सकता है। ज़रूरी जानकारी जाँच लें।</div>
 </div>
 
+<script src="/voice-bundle.js"></script>
 <script>
 const form=document.getElementById('form');
 const input=document.getElementById('message');
@@ -203,32 +204,79 @@ function saveChatHistory(){
   try{localStorage.setItem(HISTORY_KEY,chat.innerHTML);}catch(error){console.warn('Chat history save failed',error);}
 }
 
+
 const mic=document.getElementById('mic');
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 
 if(mic){
-  mic.addEventListener('click',()=>{
-    if(!SpeechRecognition){
-      alert('Bhai, is app mein voice typing support nahi hai. Keyboard ka microphone use karo.');
+  mic.addEventListener('click',async()=>{
+    const native=!!(window.Capacitor &&
+      typeof window.Capacitor.isNativePlatform==='function' &&
+      window.Capacitor.isNativePlatform());
+
+    if(native && window.SounvexaSpeechRecognition){
+      const sr=window.SounvexaSpeechRecognition;
+      try{
+        const status=await sr.available();
+        if(!status.available){
+          alert('Bhai, device par speech recognition available nahi hai.');
+          return;
+        }
+
+        let permission=await sr.checkPermissions();
+        if(permission.speechRecognition!=='granted'){
+          permission=await sr.requestPermissions();
+        }
+        if(permission.speechRecognition!=='granted'){
+          alert('Bhai, microphone permission allow karo.');
+          return;
+        }
+
+        const result=await sr.start({
+          language:'hi-IN',
+          maxResults:1,
+          popup:true,
+          partialResults:false,
+          prompt:'Boliye...'
+        });
+
+        const spokenText=result.matches?.[0];
+        if(spokenText){
+          input.value=(input.value ? input.value+' ' : '')+spokenText;
+          input.focus();
+        }
+      }catch(error){
+        alert('Microphone error: '+(error.message||String(error)));
+      }
       return;
     }
-    const recognition=new SpeechRecognition();
+
+    const BrowserSpeechRecognition=
+      window.SpeechRecognition||window.webkitSpeechRecognition;
+
+    if(!BrowserSpeechRecognition){
+      alert('Bhai, voice typing ke liye APK ka updated version aur microphone permission check karo.');
+      return;
+    }
+
+    const recognition=new BrowserSpeechRecognition();
     recognition.lang='hi-IN';
     recognition.interimResults=false;
     recognition.continuous=false;
-
     recognition.onresult=(event)=>{
       const spokenText=event.results[0][0].transcript;
       input.value=(input.value ? input.value+' ' : '')+spokenText;
       input.focus();
     };
     recognition.onerror=(event)=>{
-      alert('Microphone error: '+(event.error || 'unknown')+'. Keyboard ka mic bhi try kar sakte ho.');
+      alert('Microphone error: '+(event.error||'unknown'));
     };
     try{recognition.start();}
-    catch(error){alert('Bhai, thodi der baad dobara microphone dabao.');}
+    catch(error){
+      alert('Bhai, thodi der baad dobara microphone dabao.');
+    }
   });
 }
+
 
 const send=document.getElementById('send');
 const welcome=document.getElementById('welcome');
