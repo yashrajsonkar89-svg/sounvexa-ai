@@ -1,0 +1,426 @@
+/* SOUNVEXA CHATGPT PROFESSIONAL LAYOUT */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #212121;
+  color: #ececec;
+}
+
+.app {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 100dvh;
+  margin: auto;
+  background: #212121;
+  border-radius: 0;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: #212121;
+  border-bottom: 1px solid #383838;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 19px;
+  color: #ffffff;
+}
+
+.status {
+  font-size: 12px;
+  color: #b4b4b4;
+}
+
+main {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 22px 18px 150px;
+}
+
+.welcome {
+  padding: 45px 10px 25px;
+  text-align: center;
+}
+
+.hero-icon {
+  font-size: 48px;
+  color: #c4b5fd;
+}
+
+.welcome h2 {
+  font-size: 27px;
+  color: #ffffff;
+}
+
+.welcome p {
+  color: #b4b4b4;
+  line-height: 1.7;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.suggestions button,
+.suggestions .suggestion {
+  min-height: 75px;
+  padding: 16px;
+  text-align: left;
+  background: #2f2f2f;
+  color: #eeeeee;
+  border: 1px solid #444444;
+  border-radius: 16px;
+}
+
+#chat {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 18px 0;
+}
+
+.msg {
+  max-width: 100%;
+  padding: 16px 18px;
+  border-radius: 18px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.msg.bot {
+  align-self: stretch;
+  background: #2a2a2a;
+  color: #f1f1f1;
+}
+
+.msg.user {
+  align-self: flex-end;
+  max-width: 88%;
+  background: #424242;
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+.bot-label {
+  margin-bottom: 8px;
+  color: #c4b5fd;
+  font-weight: 700;
+}
+
+#form {
+  position: fixed;
+  z-index: 20;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: calc(100% - 24px);
+  max-width: 760px;
+  padding: 10px;
+  background: #303030;
+  border: 1px solid #505050;
+  border-radius: 26px;
+  box-shadow: 0 4px 25px #00000055;
+}
+
+#message {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+#message::placeholder {
+  color: #aaaaaa;
+}
+
+#send,
+#mic {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+#send {
+  background: #ffffff;
+  color: #222222;
+  font-size: 23px;
+}
+
+#mic {
+  background: #444444;
+  color: #ffffff;
+}
+
+.disclaimer {
+  position: fixed;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  color: #999999;
+  font-size: 10px;
+  text-align: center;
+  pointer-events: none;
+}
+
+#voiceAssistantCard {
+  margin: 20px 0;
+  padding: 14px;
+  background: #2b2b2b;
+  border: 1px solid #454545;
+  border-radius: 16px;
+}
+
+.icon-btn {
+  background: #303030;
+  color: #ffffff;
+  border: 1px solid #484848;
+  border-radius: 12px;
+}
+
+@media (max-width: 520px) {
+  main {
+    padding: 15px 12px 145px;
+  }
+
+  .welcome {
+    padding-top: 30px;
+  }
+
+  .welcome h2 {
+    font-size: 23px;
+  }
+
+  .suggestions {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .suggestions button,
+  .suggestions .suggestion {
+    padding: 11px;
+    font-size: 13px;
+  }
+
+  #form {
+    bottom: 20px;
+  }
+}
+
+/* Sounvexa AI Premium Splash Screen */
+#sounvexa-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: radial-gradient(circle at center, #172554 0%, #080b16 55%, #03040a 100%);
+  color: #fff;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .6s ease, visibility .6s ease;
+}
+#sounvexa-splash.splash-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-logo {
+  width: 94px;
+  height: 94px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #7dd3fc;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #1d4ed8, #7c3aed);
+  box-shadow: 0 0 28px #3b82f688, 0 0 70px #8b5cf633;
+  font-size: 54px;
+  font-weight: 800;
+  animation: sounvexa-pulse 1.8s ease-in-out infinite;
+}
+.splash-title {
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: 1px;
+}
+.splash-tagline {
+  color: #b8c5e4;
+  font-size: 14px;
+}
+.splash-loader {
+  width: 110px;
+  height: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #29344e;
+}
+.splash-loader::after {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #38bdf8, #a78bfa);
+  animation: sounvexa-load 1.2s ease-in-out infinite;
+}
+@keyframes sounvexa-pulse {
+  50% { transform: scale(1.06); box-shadow: 0 0 42px #3b82f6aa; }
+}
+@keyframes sounvexa-load {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(270%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo, .splash-loader::after { animation: none; }
+}
+
+/* SOUNVEXA CYBER HUB THEME */
+:root {
+  --bg:#07101d;
+  --white:#0c1828;
+  --purple:#16c8ff;
+  --purple-light:#102b40;
+  --text:#e8f4ff;
+  --muted:#8da8c2;
+  --line:#1a3850;
+}
+body {
+  background:
+    radial-gradient(ellipse at 15% 0%,#102c49 0%,transparent 42%),
+    radial-gradient(ellipse at 90% 30%,#151a43 0%,transparent 35%),
+    #07101d !important;
+  color:#e8f4ff !important;
+}
+.app {
+  background:rgba(8,19,34,.94) !important;
+  border:1px solid #1b4563 !important;
+  box-shadow:0 0 35px #00bfff12 !important;
+}
+header {
+  background:#0b1929 !important;
+  border-bottom:1px solid #1b4563 !important;
+}
+.logo,.hero-icon,.s-icon {
+  color:#42d9ff !important;
+  background:linear-gradient(135deg,#103d59,#172b50) !important;
+  border:1px solid #1d7194 !important;
+  box-shadow:0 0 18px #00bfff18;
+}
+.brand h1,.welcome h2 {
+  color:#f1f8ff !important;
+}
+.status {color:#45e6b0 !important}
+.suggestion {
+  background:linear-gradient(135deg,#102238,#0b1728) !important;
+  border:1px solid #204762 !important;
+  color:#e8f4ff !important;
+}
+.suggestion small,.welcome p,.disclaimer {
+  color:#91abc4 !important;
+}
+#voiceAssistantCard {
+  background:linear-gradient(135deg,#102d48,#111b37) !important;
+  border-color:#167da4 !important;
+}
+#voiceAssistant {
+  background:linear-gradient(135deg,#13bde9,#5666f5) !important;
+  box-shadow:0 0 20px #00bfff40;
+}
+#chat .msg {
+  border:1px solid #20435c !important;
+  background:#0e2032 !important;
+  color:#e7f4ff !important;
+}
+#chat .msg.user {
+  background:#123d58 !important;
+  border-color:#1b83a6 !important;
+}
+#form {
+  background:#0b1a2b !important;
+  border:1px solid #23516b !important;
+}
+#message {
+  background:transparent !important;
+  color:#f1f8ff !important;
+}
+#message::placeholder {color:#7e9bb6 !important}
+#send {
+  background:linear-gradient(135deg,#10bfe8,#5865f2) !important;
+  color:white !important;
+}
+.icon-btn {
+  background:#10253a !important;
+  border:1px solid #23516b !important;
+  color:#54dfff !important;
+}
+
+/* SOUNVEXA SECURITY DASHBOARD */
+#cyberDashboard{margin:22px 0;color:#e8f2ff;font-family:inherit}
+#cyberDashboard *{box-sizing:border-box}
+#cyberDashboard .cyber-hero{position:relative;overflow:hidden;padding:25px 20px;border:1px solid #244b83;border-radius:23px;background:radial-gradient(ellipse at 90% 15%,#273d80 0,transparent 38%),linear-gradient(135deg,#101b38,#080e1d 75%);box-shadow:0 12px 35px #02061780}
+#cyberDashboard .cyber-eyebrow{font-size:10px;letter-spacing:2px;color:#68e5ff;font-weight:800}
+#cyberDashboard .cyber-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#42f5d7;box-shadow:0 0 12px #42f5d7}
+#cyberDashboard .cyber-hero h2{position:relative;z-index:1;margin:18px 0 8px;font-size:clamp(25px,6vw,38px);line-height:1.15;color:#f3f7ff}
+#cyberDashboard .cyber-hero h2 span{color:#62e8ff;text-shadow:0 0 20px #168dff66}
+#cyberDashboard .cyber-hero p{position:relative;z-index:1;max-width:330px;color:#aabbd8;font-size:13px;line-height:1.7}
+#cyberDashboard .cyber-hero-actions{position:relative;z-index:2;display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-top:20px}
+#cyberDashboard .cyber-primary{padding:12px 16px;border:1px solid #6be7ff;border-radius:12px;background:linear-gradient(100deg,#1479d8,#5947d9);color:white;font-weight:800;cursor:pointer}
+#cyberDashboard .cyber-status,#cyberDashboard .cyber-live{font-size:9px;letter-spacing:1px;color:#69f5c5;font-weight:800}
+#cyberDashboard .cyber-orbit{position:absolute;right:-25px;top:48px;width:125px;height:125px;display:grid;place-items:center;border:1px solid #55c9ff66;border-radius:50%;box-shadow:0 0 35px #1479d822,inset 0 0 30px #1479d822;color:#7cecff;font-size:52px}
+#cyberDashboard .cyber-orbit:before,#cyberDashboard .cyber-orbit:after{content:"";position:absolute;border:1px solid #a78bfa66;border-radius:50%;inset:13px;transform:rotate(35deg) scaleX(.55)}
+#cyberDashboard .cyber-orbit:after{transform:rotate(-35deg) scaleX(.55)}
+#cyberDashboard .cyber-section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:25px 2px 13px}
+#cyberDashboard .cyber-section-heading small{font-size:9px;letter-spacing:2px;color:#7893b8;font-weight:800}
+#cyberDashboard .cyber-section-heading h3{margin:5px 0 0;font-size:19px;color:#edf5ff}
+#cyberDashboard .cyber-live{padding:7px 9px;border:1px solid #1e765e;border-radius:8px;background:#0d302c}
+#cyberDashboard .cyber-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#cyberDashboard .cyber-card{display:flex;min-width:0;min-height:174px;flex-direction:column;align-items:flex-start;text-align:left;gap:8px;padding:15px 13px;border:1px solid #293b5d;border-radius:17px;background:linear-gradient(145deg,#131e34,#0b1222);color:#eaf2ff;cursor:pointer;transition:transform .2s,border-color .2s}
+#cyberDashboard .cyber-card:active{transform:scale(.98)}
+#cyberDashboard .cyber-card-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#16314b;color:#66e7ff;font-size:23px}
+#cyberDashboard .cyber-card-tag{font-size:8px;letter-spacing:1px;color:#8ea9cb;font-weight:800}
+#cyberDashboard .cyber-card strong{font-size:15px;color:#f3f7ff}
+#cyberDashboard .cyber-card>span:not(.cyber-card-icon):not(.cyber-card-tag){font-size:11px;line-height:1.5;color:#a9bad2}
+#cyberDashboard .cyber-card b{margin-top:auto;padding-top:5px;font-size:10px;color:#66e7ff}
+#cyberDashboard .cyber-card-purple .cyber-card-icon{background:#30234f;color:#c4a5ff}
+#cyberDashboard .cyber-card-cyan .cyber-card-icon{background:#143845;color:#6ee7ff}
+#cyberDashboard .cyber-card-green .cyber-card-icon{background:#14382f;color:#6cf0b0}
+#cyberDashboard .cyber-card-orange .cyber-card-icon{background:#3a2b20;color:#ffc58b}
+#cyberDashboard .cyber-card-pink .cyber-card-icon{background:#3c2340;color:#f0a7ff}
+#cyberDashboard .cyber-card-blue:hover{border-color:#35bfff}
+#cyberDashboard .cyber-card-purple:hover{border-color:#a78bfa}
+#cyberDashboard .cyber-card-cyan:hover{border-color:#67e8f9}
+#cyberDashboard .cyber-card-green:hover{border-color:#6cf0b0}
+#cyberDashboard .cyber-card-orange:hover{border-color:#ffc58b}
+#cyberDashboard .cyber-card-pink:hover{border-color:#f0a7ff}
+#cyberDashboard .cyber-note{margin:14px 2px 0;padding:12px;border:1px solid #243954;border-radius:12px;background:#0c1728;color:#9db4d0;font-size:10px;line-height:1.7}
+@media(min-width:650px){#cyberDashboard .cyber-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#cyberDashboard .cyber-hero{padding:32px}}
+@media(max-width:360px){#cyberDashboard .cyber-grid{gap:8px}#cyberDashboard .cyber-card{padding:11px 9px}#cyberDashboard .cyber-orbit{right:-55px;opacity:.6}}
